@@ -1,0 +1,838 @@
+/* =========================================================
+   TOKENS
+   ========================================================= */
+:root {
+  --bg: #0b0e17;
+  --ink-black: #0a0a0a;
+  --comic-red: #e8352c;
+  --comic-blue: #2b6cff;
+  --comic-yellow: #ffd75e;
+  --paper: #f3ecd8;
+  --frame-bg: #131a2c;
+  --ink: #f5f7fb;
+  --ink-muted: #b7bfd4;
+  --font-comic: "Bangers", "Arial Narrow", cursive;
+  --font-body: "Rubik", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+p,
+ul {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* =========================================================
+   FONDO: ciudad nocturna + halftone + telarañas
+   ========================================================= */
+.city-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 110%, #161d33, var(--bg) 60%);
+}
+
+.moon {
+  position: absolute;
+  top: 8%;
+  right: 14%;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff8e0, var(--comic-yellow) 60%, transparent 75%);
+  box-shadow: 0 0 60px 10px rgba(255, 215, 94, 0.35);
+}
+
+.skyline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 40vh;
+  background-image: linear-gradient(to top, #000, rgba(0, 0, 0, 0)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.05) 0px,
+      rgba(255, 255, 255, 0.05) 16px,
+      transparent 16px,
+      transparent 42px
+    );
+  opacity: 0.9;
+}
+
+.halftone-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1.4px);
+  background-size: 7px 7px;
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+}
+
+.particle {
+  position: absolute;
+  bottom: -10px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fff;
+  animation-name: floatUp;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-110vh);
+  }
+}
+
+.web-corner {
+  position: absolute;
+  width: 34vw;
+  max-width: 220px;
+  height: auto;
+  color: rgba(255, 255, 255, 0.14);
+  pointer-events: none;
+  animation: webSway 7s ease-in-out infinite alternate;
+}
+
+.web-corner--tl {
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+
+.web-corner--br {
+  bottom: 0;
+  right: 0;
+  transform: rotate(180deg);
+  transform-origin: bottom right;
+  animation-delay: -3s;
+}
+
+@keyframes webSway {
+  from {
+    transform: rotate(-2deg);
+  }
+  to {
+    transform: rotate(1.5deg);
+  }
+}
+
+.web-corner--br {
+  animation-name: webSwayFlipped;
+}
+
+@keyframes webSwayFlipped {
+  from {
+    transform: rotate(178deg);
+  }
+  to {
+    transform: rotate(181.5deg);
+  }
+}
+
+/* =========================================================
+   COLUMPIO: cruza la pantalla colgado de un hilo (opcional, PNG propio)
+   ========================================================= */
+.web-swing {
+  position: fixed;
+  top: 5vh;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.web-swing__pivot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top center;
+  animation: swingArc 10s ease-in-out infinite;
+  animation-delay: 1.2s;
+}
+
+.web-swing__thread {
+  display: block;
+  width: 2px;
+  height: 15vh;
+  max-height: 120px;
+  margin: 0 auto;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0.1)
+  );
+}
+
+.web-swing__character {
+  display: block;
+  width: 27vw;
+  max-width: 135px;
+  min-width: 78px;
+  height: auto;
+  margin: -4px auto 0;
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.55));
+}
+
+@keyframes swingArc {
+  0% {
+    transform: translateX(-62vw) translateY(-16px) rotate(-24deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(0) translateY(16px) rotate(0deg);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(62vw) translateY(-16px) rotate(24deg);
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   LAYOUT / PANTALLAS
+   ========================================================= */
+.app {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(60px + var(--safe-top)) 18px calc(40px + var(--safe-bottom));
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+  overflow-y: auto;
+}
+
+.screen.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.screen-inner {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+/* Entrada de viñeta: zoom leve + settle */
+.screen.is-active .comic-frame {
+  animation: panelIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: scale(0.86) rotate(-1deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Reveal-on-enter (elementos internos) */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================================
+   VIÑETA / PANEL CÓMIC
+   ========================================================= */
+.comic-frame {
+  position: relative;
+  width: 100%;
+  background: var(--frame-bg);
+  border: 5px solid var(--ink-black);
+  border-radius: 14px;
+  padding: 26px 22px;
+  overflow: visible;
+}
+
+.shadow-red {
+  box-shadow: 7px 7px 0 var(--comic-red);
+}
+
+.shadow-blue {
+  box-shadow: 7px 7px 0 var(--comic-blue);
+}
+
+.shadow-yellow {
+  box-shadow: 7px 7px 0 var(--comic-yellow);
+}
+
+.panel-number {
+  position: absolute;
+  top: -16px;
+  left: -12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--ink-black);
+  border: 3px solid var(--comic-yellow);
+  color: #fff;
+  font-family: var(--font-comic);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-6deg);
+  z-index: 2;
+}
+
+/* =========================================================
+   PORTADA
+   ========================================================= */
+.cover-frame {
+  padding: 34px 24px 30px;
+  text-align: center;
+}
+
+.issue-tag {
+  display: inline-block;
+  background: var(--comic-blue);
+  color: #fff;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 2px solid #000;
+  margin-bottom: 14px;
+}
+
+.comic-title {
+  font-family: var(--font-comic);
+  font-size: clamp(2.5rem, 11vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  color: var(--comic-yellow);
+  -webkit-text-stroke: 2px #000;
+  text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.9);
+  margin-bottom: 10px;
+}
+
+.comic-title--sm {
+  font-size: clamp(1.9rem, 9vw, 2.4rem);
+}
+
+.comic-sub {
+  color: var(--ink-muted);
+  font-size: 1.02rem;
+  max-width: 30ch;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   ONOMATOPEYAS
+   ========================================================= */
+.fx {
+  font-family: var(--font-comic);
+  position: absolute;
+  font-size: clamp(1.5rem, 7vw, 2.1rem);
+  -webkit-text-stroke: 2px #000;
+  text-shadow: 3px 3px 0 #000;
+  letter-spacing: 0.03em;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.fx-tap {
+  bottom: -16px;
+  right: 4px;
+  color: #fff;
+  transform: rotate(-8deg);
+}
+
+.fx-thwip {
+  top: -18px;
+  right: -8px;
+  color: var(--comic-blue);
+  transform: rotate(6deg);
+}
+
+.fx-pow {
+  top: -20px;
+  left: -10px;
+  color: var(--comic-red);
+  transform: rotate(-10deg);
+}
+
+/* =========================================================
+   ESCENA DE VIÑETA (ícono)
+   ========================================================= */
+.panel-scene {
+  width: 116px;
+  height: 116px;
+  border-radius: 50%;
+  margin: 4px auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.09), transparent 72%);
+  border: 3px dashed rgba(255, 255, 255, 0.25);
+}
+
+.scene-icon {
+  width: 60px;
+  height: 60px;
+  color: var(--comic-yellow);
+}
+
+.scene-icon--ghost {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* =========================================================
+   GLOBOS DE DIÁLOGO
+   ========================================================= */
+.bubble {
+  position: relative;
+  background: var(--paper);
+  border: 3px solid #000;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  text-align: left;
+  color: #16171a;
+  margin-bottom: 6px;
+}
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  left: 30px;
+  bottom: -13px;
+  width: 20px;
+  height: 20px;
+  background: var(--paper);
+  border-left: 3px solid #000;
+  border-bottom: 3px solid #000;
+  border-bottom-left-radius: 4px;
+  transform: rotate(-45deg);
+}
+
+.bubble p {
+  font-weight: 500;
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.bubble--big p {
+  font-family: var(--font-comic);
+  font-size: 1.5rem;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+}
+
+.bubble-spider {
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  margin-top: 2px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round'%3E%3Cline x1='20' y1='18' x2='6' y2='6'/%3E%3Cline x1='20' y1='18' x2='4' y2='16'/%3E%3Cline x1='20' y1='18' x2='6' y2='28'/%3E%3Cline x1='20' y1='22' x2='6' y2='34'/%3E%3Cline x1='20' y1='22' x2='34' y2='34'/%3E%3Cline x1='20' y1='18' x2='36' y2='28'/%3E%3Cline x1='20' y1='18' x2='34' y2='16'/%3E%3Cline x1='20' y1='18' x2='34' y2='6'/%3E%3C/g%3E%3Cellipse cx='20' cy='22' rx='7' ry='9' fill='%23000'/%3E%3Ccircle cx='20' cy='12' r='5' fill='%23000'/%3E%3C/svg%3E");
+}
+
+/* =========================================================
+   BOTONES ESTILO CÓMIC
+   ========================================================= */
+.btn-comic,
+.btn-comic-ghost {
+  font-family: var(--font-comic);
+  font-size: 1.2rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: 4px solid #000;
+  border-radius: 12px;
+  padding: 14px 24px;
+  width: 100%;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.btn-comic {
+  background: var(--comic-red);
+  color: #fff;
+  box-shadow: 6px 6px 0 #000;
+}
+
+.btn-comic:active {
+  transform: translate(4px, 4px);
+  box-shadow: 2px 2px 0 #000;
+}
+
+.btn-comic-ghost {
+  background: var(--paper);
+  color: #16171a;
+  box-shadow: 6px 6px 0 var(--comic-red);
+}
+
+.btn-comic-ghost:active {
+  transform: translate(4px, 4px);
+  box-shadow: 2px 2px 0 var(--comic-red);
+}
+
+.btn-next {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--comic-blue);
+  border: 4px solid #000;
+  color: #fff;
+  font-size: 1.2rem;
+  box-shadow: 4px 4px 0 #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px auto 0;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.btn-next:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 #000;
+}
+
+.question-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+/* =========================================================
+   VIÑETA FINAL — TICKET / PÓSTER
+   ========================================================= */
+.poster-frame {
+  padding-top: 30px;
+}
+
+.poster-burst {
+  position: absolute;
+  top: -20px;
+  right: -14px;
+  width: 84px;
+  height: 84px;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-comic);
+  font-size: 0.66rem;
+  letter-spacing: 0.03em;
+  color: #16171a;
+  line-height: 1.15;
+  transform: rotate(8deg);
+}
+
+.poster-burst::before,
+.poster-burst::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--comic-yellow);
+  border: 3px solid #000;
+  border-radius: 6px;
+  z-index: -1;
+}
+
+.poster-burst::after {
+  transform: rotate(45deg);
+}
+
+.ticket {
+  width: 100%;
+  background: var(--paper);
+  border: 3px solid #000;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: left;
+  color: #16171a;
+  position: relative;
+}
+
+.ticket-top {
+  padding: 18px 18px 12px;
+}
+
+.ticket-tag {
+  display: inline-block;
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--comic-blue);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.ticket-movie {
+  font-family: var(--font-comic);
+  font-size: 2.1rem;
+  letter-spacing: 0.02em;
+  color: var(--comic-red);
+}
+
+.ticket-perf {
+  position: relative;
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.35) 0,
+    rgba(0, 0, 0, 0.35) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  margin: 0 18px;
+}
+
+.ticket-perf::before,
+.ticket-perf::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--frame-bg);
+  border: 3px solid #000;
+}
+
+.ticket-perf::before {
+  left: -29px;
+}
+
+.ticket-perf::after {
+  right: -29px;
+}
+
+.ticket-body {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ticket-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.ticket-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6b6455;
+}
+
+.ticket-value {
+  font-weight: 700;
+  text-align: right;
+}
+
+.ticket-bottom {
+  padding: 12px 18px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.76rem;
+  color: #6b6455;
+}
+
+.ticket-code {
+  font-family: "Courier New", monospace;
+  letter-spacing: 0.05em;
+  color: var(--comic-red);
+  font-weight: 700;
+}
+
+/* =========================================================
+   TELARAÑA ANIMADA (pantalla de aceptación)
+   ========================================================= */
+.web-draw {
+  position: absolute;
+  inset: -18px;
+  width: calc(100% + 36px);
+  height: calc(100% + 36px);
+  color: rgba(255, 255, 255, 0.55);
+  pointer-events: none;
+  stroke-dasharray: 900;
+  stroke-dashoffset: 900;
+  opacity: 0;
+  z-index: 0;
+}
+
+#screen-accepted.is-active .web-draw {
+  animation: webDraw 1.6s ease forwards 0.15s;
+}
+
+@keyframes webDraw {
+  0% {
+    opacity: 0.9;
+    stroke-dashoffset: 900;
+  }
+  100% {
+    opacity: 0.3;
+    stroke-dashoffset: 0;
+  }
+}
+
+#screen-accepted .comic-frame > h2,
+#screen-accepted .comic-frame > p {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   CONTADOR DE PÁGINA
+   ========================================================= */
+.page-counter {
+  position: fixed;
+  top: calc(14px + var(--safe-top));
+  left: 14px;
+  z-index: 6;
+  background: var(--ink-black);
+  color: #fff;
+  font-family: var(--font-comic);
+  border: 3px solid var(--comic-yellow);
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  transform: rotate(-3deg);
+}
+
+/* =========================================================
+   CONFETI
+   ========================================================= */
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* =========================================================
+   RESPONSIVE — tablet / desktop
+   ========================================================= */
+@media (min-width: 720px) {
+  .screen-inner {
+    max-width: 460px;
+    gap: 20px;
+  }
+
+  .comic-title {
+    font-size: 4.4rem;
+  }
+
+  .ticket-movie {
+    font-size: 2.4rem;
+  }
+
+  .btn-comic,
+  .btn-comic-ghost {
+    width: auto;
+    min-width: 260px;
+  }
+
+  .question-actions {
+    align-items: center;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .particle,
+  .web-corner,
+  .screen.is-active .comic-frame,
+  .web-draw {
+    animation: none !important;
+  }
+
+  .web-swing {
+    display: none;
+  }
+
+  .reveal {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .web-draw {
+    opacity: 0.3;
+    stroke-dashoffset: 0;
+  }
+}

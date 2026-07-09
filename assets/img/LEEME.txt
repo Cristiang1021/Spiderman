@@ -1,0 +1,16 @@
+Pon aquí tu imagen para el efecto "columpio":
+
+  spiderman-swing.png
+
+Recomendaciones para que se vea bien:
+- PNG con fondo TRANSPARENTE.
+- Encuadre vertical/cuadrado, bien recortado alrededor de la figura (sin espacio vacío de sobra).
+- Ancho recomendado: 300-500px (se escala automáticamente en pantalla, no hace falta que sea grande).
+- Peso ligero: idealmente menos de 300 KB para que cargue rápido en móvil.
+- Como el mismo dibujo se usa cruzando hacia la izquierda y hacia la derecha, funciona mejor
+  una pose "neutra" (de frente o en diagonal) que una silueta de perfil estricto mirando a un solo lado.
+
+Si no pones el archivo, la web funciona igual: el efecto de columpio simplemente no aparece
+(no se rompe nada ni se ve un ícono roto).
+
+Este archivo (LEEME.txt) no afecta la web, es solo esta nota. Puedes borrarlo cuando quieras.

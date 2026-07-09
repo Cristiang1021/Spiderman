@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Nueva misión desbloqueada</title>
+<meta name="description" content="Una invitación al cine en formato mini-cómic interactivo." />
+<meta name="theme-color" content="#0b0e17" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%95%B7%EF%B8%8F%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- Fondo: ciudad nocturna + halftone + telarañas -->
+<div class="city-bg" aria-hidden="true">
+  <div class="moon"></div>
+  <div class="skyline"></div>
+  <div class="halftone-overlay"></div>
+  <div class="particles" id="particles"></div>
+  <svg class="web-corner web-corner--tl" viewBox="0 0 200 200" aria-hidden="true"><use href="#web-pattern"/></svg>
+  <svg class="web-corner web-corner--br" viewBox="0 0 200 200" aria-hidden="true"><use href="#web-pattern"/></svg>
+
+  <!-- Columpio: cruza toda la pantalla colgado de un hilo, detrás de las tarjetas -->
+  <div class="web-swing" id="web-swing">
+    <div class="web-swing__pivot">
+      <span class="web-swing__thread"></span>
+      <img
+        class="web-swing__character"
+        src="assets/img/spiderman-swing.png"
+        alt=""
+        loading="lazy"
+        onerror="this.closest('.web-swing').remove()"
+      />
+    </div>
+  </div>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="web-pattern">
+      <path d="M0,0 L200,200 M0,60 L140,200 M0,130 L70,200 M60,0 L200,140 M130,0 L200,70" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      <path d="M0,0 Q60,10 40,60 Q90,50 90,110 Q140,90 130,150 Q170,140 200,200" stroke="currentColor" stroke-width="1.5" fill="none"/>
+    </g>
+    <g id="icon-reel">
+      <circle cx="32" cy="32" r="26" fill="none" stroke="currentColor" stroke-width="3"/>
+      <circle cx="32" cy="32" r="6" fill="none" stroke="currentColor" stroke-width="3"/>
+      <circle cx="32" cy="14" r="4.5" fill="currentColor"/>
+      <circle cx="48" cy="24" r="4.5" fill="currentColor"/>
+      <circle cx="48" cy="42" r="4.5" fill="currentColor"/>
+      <circle cx="16" cy="42" r="4.5" fill="currentColor"/>
+      <circle cx="16" cy="24" r="4.5" fill="currentColor"/>
+    </g>
+    <g id="icon-seat">
+      <path d="M14 30 V50 a4 4 0 0 0 4 4 H46 a4 4 0 0 0 4-4 V30" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M14 30 V18 a4 4 0 0 1 4-4 H46 a4 4 0 0 1 4 4 V30" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M14 30 H50" stroke="currentColor" stroke-width="3"/>
+      <path d="M10 40 V54" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <path d="M54 40 V54" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <g id="icon-figure">
+      <circle cx="32" cy="16" r="9" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="4 4"/>
+      <path d="M32 26 V46 M32 32 L18 26 M32 32 L46 26 M32 46 L20 60 M32 46 L44 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 4"/>
+    </g>
+  </defs>
+</svg>
+
+<main class="app" id="app">
+
+  <!-- Portada -->
+  <section class="screen is-active" id="screen-cover" data-screen="cover">
+    <div class="screen-inner">
+      <div class="comic-frame cover-frame shadow-red">
+        <span class="issue-tag reveal" data-delay="0">Edición especial · N.º 1</span>
+        <h1 class="comic-title reveal" data-delay="150">Nueva misión<br />desbloqueada</h1>
+        <p class="comic-sub reveal" data-delay="350">Tienes una invitación especial…</p>
+        <span class="fx fx-tap reveal" data-delay="500" aria-hidden="true">TAP!</span>
+      </div>
+      <button class="btn-comic reveal" data-delay="600" data-next>Abrir cómic</button>
+    </div>
+  </section>
+
+  <!-- Viñeta 1 -->
+  <section class="screen panel" id="screen-panel1" data-screen="panel1">
+    <div class="screen-inner">
+      <div class="comic-frame shadow-blue">
+        <span class="panel-number">1</span>
+        <div class="panel-scene">
+          <svg class="scene-icon" viewBox="0 0 64 64"><use href="#icon-figure"/></svg>
+        </div>
+        <div class="bubble reveal" data-delay="150">
+          <span class="bubble-spider" aria-hidden="true"></span>
+          <p>La ciudad estaba tranquila…</p>
+        </div>
+      </div>
+      <button class="btn-next reveal" data-delay="450" data-next aria-label="Siguiente viñeta">▶</button>
+    </div>
+  </section>
+
+  <!-- Viñeta 2 -->
+  <section class="screen panel" id="screen-panel2" data-screen="panel2">
+    <div class="screen-inner">
+      <div class="comic-frame shadow-red">
+        <span class="panel-number">2</span>
+        <div class="panel-scene">
+          <svg class="scene-icon" viewBox="0 0 64 64"><use href="#icon-reel"/></svg>
+        </div>
+        <span class="fx fx-thwip reveal" data-delay="150" aria-hidden="true">THWIP!</span>
+        <div class="bubble reveal" data-delay="300">
+          <span class="bubble-spider" aria-hidden="true"></span>
+          <p>Hasta que apareció una película pendiente…</p>
+        </div>
+      </div>
+      <button class="btn-next reveal" data-delay="550" data-next aria-label="Siguiente viñeta">▶</button>
+    </div>
+  </section>
+
+  <!-- Viñeta 3 -->
+  <section class="screen panel" id="screen-panel3" data-screen="panel3">
+    <div class="screen-inner">
+      <div class="comic-frame shadow-yellow">
+        <span class="panel-number">3</span>
+        <div class="panel-scene">
+          <svg class="scene-icon" viewBox="0 0 64 64"><use href="#icon-seat"/></svg>
+        </div>
+        <span class="fx fx-pow reveal" data-delay="150" aria-hidden="true">POW!</span>
+        <div class="bubble reveal" data-delay="300">
+          <span class="bubble-spider" aria-hidden="true"></span>
+          <p>Un asiento quedó reservado…</p>
+        </div>
+      </div>
+      <button class="btn-next reveal" data-delay="550" data-next aria-label="Siguiente viñeta">▶</button>
+    </div>
+  </section>
+
+  <!-- Viñeta 4 -->
+  <section class="screen panel" id="screen-panel4" data-screen="panel4">
+    <div class="screen-inner">
+      <div class="comic-frame shadow-blue">
+        <span class="panel-number">4</span>
+        <div class="panel-scene">
+          <svg class="scene-icon scene-icon--ghost" viewBox="0 0 64 64"><use href="#icon-figure"/></svg>
+        </div>
+        <div class="bubble reveal" data-delay="150">
+          <span class="bubble-spider" aria-hidden="true"></span>
+          <p>Pero falta alguien para completar la misión…</p>
+        </div>
+      </div>
+      <button class="btn-next reveal" data-delay="450" data-next aria-label="Siguiente viñeta">▶</button>
+    </div>
+  </section>
+
+  <!-- Viñeta final: ticket / póster -->
+  <section class="screen" id="screen-ticket" data-screen="ticket">
+    <div class="screen-inner">
+      <div class="comic-frame poster-frame shadow-red">
+        <span class="panel-number">5</span>
+        <span class="poster-burst">ENTRADA<br />VIP</span>
+        <div class="ticket">
+          <div class="ticket-top">
+            <span class="ticket-tag">MISIÓN CONFIDENCIAL</span>
+            <h2 class="ticket-movie" id="ticket-movie">Spider-Man</h2>
+          </div>
+          <div class="ticket-perf" aria-hidden="true"></div>
+          <div class="ticket-body">
+            <div class="ticket-row">
+              <span class="ticket-label">Fecha</span>
+              <span class="ticket-value" id="ticket-date">—</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">Hora</span>
+              <span class="ticket-value" id="ticket-time">—</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">Lugar</span>
+              <span class="ticket-value" id="ticket-place">—</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">Plan</span>
+              <span class="ticket-value" id="ticket-plan">—</span>
+            </div>
+          </div>
+          <div class="ticket-perf" aria-hidden="true"></div>
+          <div class="ticket-bottom">
+            <span id="ticket-guest">Invitado especial</span>
+            <span class="ticket-code" id="ticket-code">#SM-0001</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-comic reveal" data-delay="250" data-next>Última página →</button>
+    </div>
+  </section>
+
+  <!-- Pregunta final -->
+  <section class="screen" id="screen-question" data-screen="question">
+    <div class="screen-inner">
+      <div class="comic-frame shadow-yellow">
+        <span class="panel-number">6</span>
+        <div class="bubble bubble--big reveal" data-delay="0">
+          <span class="bubble-spider" aria-hidden="true"></span>
+          <p id="question-text">¿Aceptas ir conmigo al cine?</p>
+        </div>
+      </div>
+      <div class="question-actions">
+        <button class="btn-comic reveal" data-delay="250" id="btn-accept">
+          Sí, acepto la misión
+        </button>
+        <button class="btn-comic-ghost reveal" data-delay="400" id="btn-decline">
+          Necesito pensarlo…
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Respuesta al rechazar -->
+  <section class="screen" id="screen-declined" data-screen="declined">
+    <div class="screen-inner">
+      <div class="comic-frame shadow-blue">
+        <div class="bubble bubble--big reveal" data-delay="0">
+          <span class="bubble-spider" aria-hidden="true"></span>
+          <p>El multiverso respetará tu decisión… aunque el Spider-Sense esperaba un sí 😔</p>
+        </div>
+      </div>
+      <button class="btn-comic reveal" data-delay="300" id="btn-decline-accept">
+        Bueno, acepto la misión
+      </button>
+    </div>
+  </section>
+
+  <!-- Respuesta al aceptar -->
+  <section class="screen" id="screen-accepted" data-screen="accepted">
+    <div class="screen-inner">
+      <div class="comic-frame shadow-red">
+        <svg class="web-draw" viewBox="0 0 200 200" aria-hidden="true">
+          <use href="#web-pattern" />
+        </svg>
+        <h2 class="comic-title comic-title--sm reveal" data-delay="100">Misión aceptada 🕷️🍿</h2>
+        <p class="comic-sub reveal" data-delay="250">Nos vemos en el cine.</p>
+      </div>
+      <a class="btn-comic reveal" data-delay="450" id="btn-whatsapp" target="_blank" rel="noopener">
+        Confirmar por WhatsApp
+      </a>
+      <button class="btn-comic-ghost reveal" data-delay="600" id="btn-restart">
+        Volver a leer el cómic
+      </button>
+    </div>
+  </section>
+
+</main>
+
+<canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+<div class="page-counter" id="page-counter" aria-hidden="true">PORTADA</div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
