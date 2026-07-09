@@ -2,7 +2,7 @@
 // EDITA SOLO ESTE ARCHIVO PARA PERSONALIZAR LA INVITACIÓN
 // ============================================
 window.invitation = {
-  movie: "Spider-Man",
+  movie: "Spider-Man: Brand New Day",
   date: "Sábado 1 de agosto",
   time: "20:10",
   place: "Multicines CCI",
