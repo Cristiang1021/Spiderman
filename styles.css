@@ -774,6 +774,52 @@ button {
 }
 
 /* =========================================================
+   BOTÓN DE SONIDO
+   ========================================================= */
+.sound-toggle {
+  position: fixed;
+  top: calc(14px + var(--safe-top));
+  right: 14px;
+  z-index: 6;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--ink-black);
+  border: 3px solid var(--comic-yellow);
+  color: #fff;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transform: rotate(3deg);
+  transition: transform 0.12s ease;
+}
+
+.sound-toggle:active {
+  transform: rotate(3deg) scale(0.9);
+}
+
+/* =========================================================
+   FOTO EN PANTALLA DE "NECESITO PENSARLO"
+   ========================================================= */
+.declined-photo-slot {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.declined-photo {
+  max-width: 190px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
+}
+
+/* =========================================================
    CONFETI
    ========================================================= */
 #confetti-canvas {

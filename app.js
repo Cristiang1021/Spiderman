@@ -87,6 +87,7 @@
     pageCounter.style.display = pageLabels[name] ? "block" : "none";
 
     if (name === "accepted") celebrate();
+    handleScreenAudio(name);
 
     app.scrollTop = 0;
   }
@@ -210,7 +211,67 @@
   }
 
   /* ---------------------------------------------
-   * 5. Init
+   * 5. Sonido: música de fondo en loop + efecto al "pensarlo"
+   * ------------------------------------------- */
+  const audioTheme = document.getElementById("audio-theme");
+  const audioSad = document.getElementById("audio-sad");
+  const soundToggle = document.getElementById("sound-toggle");
+
+  let audioMuted = false;
+  let audioUnlocked = false;
+
+  function unlockAudio() {
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+    if (!audioMuted) {
+      audioTheme.volume = 0.55;
+      audioTheme.play().catch(() => {});
+    }
+  }
+  document.addEventListener("pointerdown", unlockAudio, { once: true });
+
+  function handleScreenAudio(name) {
+    if (name === "declined") {
+      audioTheme.pause();
+      if (!audioMuted) {
+        audioSad.currentTime = 0;
+        audioSad.play().catch(() => {});
+      }
+    } else {
+      audioSad.pause();
+      if (audioUnlocked && !audioMuted) {
+        audioTheme.play().catch(() => {});
+      }
+    }
+  }
+
+  audioSad.addEventListener("ended", () => {
+    if (audioUnlocked && !audioMuted) {
+      audioTheme.play().catch(() => {});
+    }
+  });
+
+  soundToggle.addEventListener("click", () => {
+    unlockAudio();
+    audioMuted = !audioMuted;
+    soundToggle.textContent = audioMuted ? "🔇" : "🔊";
+    soundToggle.setAttribute("aria-pressed", String(audioMuted));
+    soundToggle.setAttribute(
+      "aria-label",
+      audioMuted ? "Activar música" : "Silenciar música"
+    );
+
+    if (audioMuted) {
+      audioTheme.pause();
+      audioSad.pause();
+    } else {
+      const current = document.querySelector(".screen.is-active");
+      handleScreenAudio(current ? current.dataset.screen : "cover");
+    }
+  });
+
+  /* ---------------------------------------------
+   * 6. Init
    * ------------------------------------------- */
   fillInvitationData();
   buildParticles();

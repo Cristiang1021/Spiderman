@@ -222,6 +222,15 @@
           <span class="bubble-spider" aria-hidden="true"></span>
           <p>El multiverso respetará tu decisión… aunque el Spider-Sense esperaba un sí 😔</p>
         </div>
+        <div class="declined-photo-slot reveal" data-delay="150">
+          <img
+            class="declined-photo"
+            src="assets/img/declined.jpg"
+            alt=""
+            loading="lazy"
+            onerror="this.parentElement.remove()"
+          />
+        </div>
       </div>
       <button class="btn-comic reveal" data-delay="300" id="btn-decline-accept">
         Bueno, acepto la misión
@@ -253,6 +262,11 @@
 <canvas id="confetti-canvas" aria-hidden="true"></canvas>
 
 <div class="page-counter" id="page-counter" aria-hidden="true">PORTADA</div>
+
+<button class="sound-toggle" id="sound-toggle" type="button" aria-label="Silenciar música" aria-pressed="false">🔊</button>
+
+<audio id="audio-theme" src="assets/sound/theme.mp3" loop preload="auto"></audio>
+<audio id="audio-sad" src="assets/sound/sad.mp3" preload="auto"></audio>
 
 <script src="config.js"></script>
 <script src="app.js"></script>
